@@ -9,7 +9,7 @@ namespace lazy{
             "input/gps", rclcpp::QoS{1}, std::bind(&GpsOdomNode::dataCallback,this, _1));
         pub_ = create_publisher<nav_msgs::msg::Odometry>(
             "output/gps_odom", rclcpp::QoS{1});
-        tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(shared_from_this());
+        
     }
 
     static int GetComa(int num, const char *str)
@@ -112,6 +112,7 @@ namespace lazy{
             transform_stamped.transform.rotation.z = qua.z();
             transform_stamped.transform.rotation.w = qua.w();
 
+            tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(shared_from_this());
             tf_broadcaster_->sendTransform(transform_stamped);
         }
     }

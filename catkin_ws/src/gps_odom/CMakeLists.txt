@@ -1,40 +1,27 @@
 cmake_minimum_required(VERSION 3.8)
 project(gps_odom)
 
-if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  add_compile_options(-Wall -Wextra -Wpedantic)
-endif()
-
-# find dependencies
-find_package(ament_cmake REQUIRED)
+find_package (ament_cmake_auto REQUIRED) 
 find_package(rclcpp REQUIRED)
-ament_package()
-# uncomment the following section in order to fill in
-# further dependencies manually.
-# find_package(<dependency> REQUIRED)
-# Add an executable
-include_directories()
-ament_auto_add_library(gps_odom SHARED
-  src/gps_odom.cpp)
+find_package(rclcpp_components REQUIRED)
+find_package(geodesy REQUIRED)
+
+set(dependencies
+    rclcpp
+    rclcpp_components
+    geodesy
+)
+
+ament_auto_find_build_dependencies ()
+
+ament_auto_add_library ( gps_odom SHARED 
+    src/gps_odom.cpp 
+    include/gps_odom/gps_odom.hpp)
+
 rclcpp_components_register_node(gps_odom
   PLUGIN "lazy::GpsOdomNode"
-  EXECUTABLE gps_odom
+  EXECUTABLE gps_odom_node
 )
-# Install executables and libraries for the package
-install(TARGETS
-  gps_odom
-  DESTINATION lib/${PROJECT_NAME})
 
-
-if(BUILD_TESTING)
-  find_package(ament_lint_auto REQUIRED)
-  # the following line skips the linter which checks for copyrights
-  # comment the line when a copyright and license is added to all source files
-  set(ament_cmake_copyright_FOUND TRUE)
-  # the following line skips cpplint (only works in a git repo)
-  # comment the line when this package is in a git repo and when
-  # a copyright and license is added to all source files
-  set(ament_cmake_cpplint_FOUND TRUE)
-  ament_lint_auto_find_test_dependencies()
-endif()
-
+ament_target_dependencies(gps_odom ${dependencies})
+ament_auto_package ()

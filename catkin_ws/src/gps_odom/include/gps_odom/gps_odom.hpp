@@ -2,7 +2,7 @@
 #define _GPS_ODOM_HPP__
 
 #include <rclcpp/rclcpp.hpp>
-#include <geometry_msgs/geometry_msgs/msg/quaternion_stamped.hpp>
+// #include <geometry_msgs/geometry_msgs/msg/quaternion_stamped.hpp>
 #include <nmea_msgs/msg/sentence.hpp>
 #include <nav_msgs/msg/odometry.hpp>
 #include <std_msgs/msg/string.hpp>
@@ -24,38 +24,38 @@ namespace lazy{
             
             rclcpp::Subscription<nmea_msgs::msg::Sentence>::SharedPtr sub_;
             rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr pub_;
+            std::shared_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
     };
 
-    struct day
-    {
-        int32_t hour;
-        int32_t minute;
-        int32_t second;
-        int32_t day;
-        int32_t month;
-        int32_t year;
-    };
-    struct gps_odom
-    {
-        day D;
-        double lattitude;
-        double lattitude_d;
-        double NS;
-        double longitude;
-        double longitude_d;
-        double EW;
-        double direction;
-        std::string status;
-    };
-    struct Localxy
-    {
-        double X;
-        double Y;
-    };
-    Localxy localXY;
-    gps_odom *prmc_info;
-    auto tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>();
-    double origin_x = 658357.000, origin_y = 3292682.000;
-    
+        struct day
+        {
+            int32_t hour;
+            int32_t minute;
+            int32_t second;
+            int32_t day;
+            int32_t month;
+            int32_t year;
+        };
+        struct gps_odom
+        {
+            day D;
+            double lattitude;
+            double lattitude_d;
+            double NS;
+            double longitude;
+            double longitude_d;
+            double EW;
+            double direction;
+            std::string status;
+        };
+        struct Localxy
+        {
+            double X;
+            double Y;
+        };
+        Localxy localXY;
+        gps_odom *prmc_info;
+        
+        double origin_x = 658357.000, origin_y = 3292682.000;
 }; //namespace lazy
 #endif
